@@ -12,6 +12,7 @@ import (
 )
 
 type human struct {
+  name string
 	hp      int
 	atk     int
 	def     int
@@ -30,15 +31,33 @@ func generateHero(gold int) human {
 	gen := rand.New(seed)
 
 	var h human
+  fmt.Println("Player, choose your name.")
+  var user string
+  fmt.Scanln(&user)
+  time.Sleep(2 * time.Second)
+  fmt.Println(user + " you embark on a great and perilous journey. Good luck!")
+  time.Sleep(2 * time.Second)
+
 
 	potions := [5]int{2, 2, 2, 2, 2}
+  h.name = user
 	h.hp = gen.Intn(11) + 20
 	h.atk = gen.Intn(3) + 1
 	h.def = gen.Intn(5) + 1
 	h.potions = potions
 	h.gold = gold
 
-	return h
+  fmt.Println("Generating stats...")
+  time.Sleep(3 * time.Second)
+
+  var health string = "Health: " + strconv.Itoa(h.hp)
+  var attack string = "Attack: " + strconv.Itoa(h.atk)
+  var defense string = "Defense: " + strconv.Itoa(h.def)
+  var stats string = "Name: " + user + "\n" + health + "\n" + attack + "\n" + defense
+
+  fmt.Println(stats)
+
+	return h //Returns the hero generated character to the variable that called this function
 }
 
 func generateGoblin() goblin {
@@ -136,8 +155,8 @@ func (h *human) steps() {
 			h.def = defense
 			fmt.Println("You are back at ", strconv.Itoa(h.def), " defense.")
 		}
-		chance := gen.Intn(10) + 1
-		if chance == 10 {
+		chance := gen.Intn(5) + 1
+		if chance == 5 {
 			fmt.Println("A wild goblin approaches! Get ready to fight!")
 			g := generateGoblin()
 			if h.fight(&g) {
@@ -192,10 +211,13 @@ func (h *human) potionShop() {
 }
 func main() {
 
-	h := generateHero(0)
-	user := "Y"
+  user := "Y"
+  fmt.Println("Would you like to play Goblin Tower? Y/N")
+  fmt.Scanln(&user)
+	
+	
 	for user == "Y" {
-		fmt.Println(h)
+    h := generateHero(0)
 		h.steps()      //Runs the game
 		fmt.Println(h) //Prints out player stats
 		fmt.Println("You want to play again? Y/N")
