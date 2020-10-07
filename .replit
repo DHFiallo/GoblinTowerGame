@@ -1,2 +1,2 @@
 language = "go"
-run = "go run GoblinTower.go"
+run = "go run DariusDungeon.go"

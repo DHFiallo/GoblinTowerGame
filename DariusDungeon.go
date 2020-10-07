@@ -1,5 +1,4 @@
 //Darius Fiallo
-//June 17, 2020
 //Goblin Tower (roguelike game)
 
 package main
@@ -80,26 +79,34 @@ func (h *human) fight(g *goblin) bool {
 		var dmg string
 		var def int = 0
 		var hp int = 0
-		for i := 0; i < h.atk; i++ {
+    fmt.Println("Attack (1) or Defend (2)? Press 1 or 2")
+    var user int
+    fmt.Scanln(&user)
+    if user == 1 {
+      for i := 0; i < h.atk; i++ {
 
-			if g.def > 0 {
-				g.def--
-				def++
-			} else if g.hp > 0 {
-				g.hp--
-				hp++
-			}
+        if g.def > 0 {
+          g.def--
+          def++
+        } else if g.hp > 0 {
+          g.hp--
+          hp++
+        }
 
-		}
-		dmg = dmg + strconv.Itoa(def) + " defense and " + strconv.Itoa(hp) + " hp."
-		fmt.Println("You hit the goblin for ", dmg)
-		fmt.Println("It has ", strconv.Itoa(g.def)+" defense and "+strconv.Itoa(g.hp)+" health.")
+      }
+
+      dmg = dmg + strconv.Itoa(def) + " defense and " + strconv.Itoa(hp) + " hp."
+		  fmt.Println("You hit the goblin for ", dmg)
+	  	fmt.Println("It has ", strconv.Itoa(g.def)+" defense and "+strconv.Itoa(g.hp)+"   health.")
+    }
+		
+
 		if g.hp > 0 {
 			def = 0
 			hp = 0
 			for i := 0; i < g.atk; i++ {
 				dmg = ""
-				if h.def > 0 {
+				if h.def > 0 && user == 2 {
 					h.def--
 					def++
 				} else if h.hp > 0 {
@@ -214,16 +221,17 @@ func main() {
   user := "Y"
   fmt.Println("Would you like to play Goblin Tower? Y/N")
   fmt.Scanln(&user)
-	
-	
+
+  var gold int = 0
+
 	for user == "Y" {
-    h := generateHero(0)
+    h := generateHero(gold)
 		h.steps()      //Runs the game
-		fmt.Println(h) //Prints out player stats
+		fmt.Println(h) //Prints out player stats after they die (an inevitability)
 		fmt.Println("You want to play again? Y/N")
 		fmt.Scanln(&user)
 		if user == "Y" {
-			h = generateHero(h.gold)
+			gold = h.gold
 		} else {
 			user = "N"
 			fmt.Println("Thank you for playing Darius's Dungeon")
