@@ -25,6 +25,10 @@ type goblin struct {
 	def int
 }
 
+var health int
+var defense int
+var attack int
+
 func generateHero(gold int) human {
 	seed := rand.NewSource(time.Now().UnixNano())
 	gen := rand.New(seed)
@@ -97,7 +101,7 @@ func (h *human) fight(g *goblin) bool {
 
       dmg = dmg + strconv.Itoa(def) + " defense and " + strconv.Itoa(hp) + " hp."
 		  fmt.Println("You hit the goblin for ", dmg)
-	  	fmt.Println("It has ", strconv.Itoa(g.def)+" defense and "+strconv.Itoa(g.hp)+"   health.")
+	  	fmt.Println("It has ", strconv.Itoa(g.def)+" defense and "+strconv.Itoa(g.hp)+" health.")
     }
 		
 
@@ -132,8 +136,8 @@ func (h *human) fight(g *goblin) bool {
 }
 
 func (h *human) steps() {
-	defense := h.def
-	health := h.hp
+	defense = h.def
+	health = h.hp
 
 	steps := 0
 	level := 1
@@ -151,6 +155,7 @@ func (h *human) steps() {
 		if steps%10 == 0 {
 			fmt.Println("Level up!")
 			fmt.Println("Step #", strconv.Itoa(steps))
+      h.levelUp()
 			var user string
 			fmt.Println("Would you like to visit the potion shop? Y/N")
 			fmt.Scanln(&user)
@@ -215,6 +220,35 @@ func (h *human) potionShop() {
 			}
 		}
 	}
+}
+
+func (h *human) levelUp() {
+  fmt.Println("Congratulations! You've leveled up. You have 1 point to allocate.")
+  time.Sleep(time.Second)
+  fmt.Println("Which stat would you like to put it in?")
+  time.Sleep(time.Second)
+  fmt.Println("1) Health")
+  fmt.Println("2) Attack")
+  fmt.Println("3) Defense")
+  var userS string
+
+  CheckLoop:
+    for {
+      _, err := fmt.Scanln(&userS)
+      userI, err := strconv.Atoi(userS)
+
+      if err != nil {
+        fmt.Println("Enter a valid number")
+      }
+
+      switch (userI) {
+        case 1: h.hp++; health++; break CheckLoop;
+        case 2: h.atk++; attack++; break CheckLoop;
+        case 3: h.def++; defense++; break CheckLoop;
+        default: fmt.Println("Incorrect number, try again.");
+      }
+    }
+  fmt.Println("exited for loop?")
 }
 func main() {
 
